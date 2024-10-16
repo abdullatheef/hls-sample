@@ -1,0 +1,6 @@
+docker build -t hls .
+docker run -it -v /Users/itzmeontv/projects/exp/hls:/home/app/videos hls
+
+
+
+ffmpeg -i 4434242-uhd_2160_3840_24fps.mp4 -codec:v libx264 -codec:a aac -hls_time 10 -hls_playlist_type vod -hls_segment_filename output/segment%03d.ts -start_number 0 output/index.m3u8

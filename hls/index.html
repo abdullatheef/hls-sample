@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full-Fledged Video Player</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f9f9f9;
+            font-family: Arial, sans-serif;
+        }
+        .video-container {
+            position: relative;
+            width: 960px;
+        }
+        .bitrate-controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .bitrate-button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 3px;
+            transition: background-color 0.3s;
+        }
+        .bitrate-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Video Player</h1>
+    <div class="video-container">
+        <video id="example-video" class="video-js vjs-default-skin" controls preload="auto" width="960" height="540">
+            <source src="http://localhost:8001/index.m3u8" type="application/x-mpegURL">
+            <p class="vjs-no-js">
+                To view this video please enable JavaScript, and consider upgrading to a web browser that
+                <a href="https://www.google.com/intl/en/chrome/">supports HTML5 video</a>
+            </p>
+        </video>
+    </div>
+
+    <div class="bitrate-controls">
+        <button class="bitrate-button" onclick="changeSource('http://localhost:8001/index.m3u8')">Low Bitrate</button>
+        <button class="bitrate-button" onclick="changeSource('http://localhost:8002/index.m3u8')">Medium Bitrate</button>
+        <button class="bitrate-button" onclick="changeSource('http://localhost:8003/index.m3u8')">High Bitrate</button>
+    </div>
+
+    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+    
+    <script>
+        var player = videojs('example-video');
+
+        // Function to change video source
+        function changeSource(src) {
+            // Store the current playback time
+            var currentTime = player.currentTime();
+
+            // Change the source
+            player.src({ 
+                type: 'application/x-mpegURL', 
+                src: src 
+            });
+
+            // Load the new source and set the current time back
+            player.ready(function() {
+                // Optionally, you could set the current time to the start if it makes more sense
+                player.currentTime(currentTime); // Keep current time
+                player.play(); // Start playing the new video
+            });
+        }
+        // Function for fast forward
+        function fastForward() {
+            var currentTime = player.currentTime();
+            player.currentTime(currentTime + 10); // Fast forward by 10 seconds
+        }
+
+        // Function for rewind
+        function rewind() {
+            var currentTime = player.currentTime();
+            player.currentTime(currentTime - 10); // Rewind by 10 seconds
+        }
+    </script>
+
+    <div class="controls">
+        <button onclick="rewind()">Rewind 10s</button>
+        <button onclick="fastForward()">Fast Forward 10s</button>
+    </div>
+
+</body>
+</html>
